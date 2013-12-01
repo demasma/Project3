@@ -1,0 +1,100 @@
+Bootstrapping
+========================================================
+
+Lecture
+--------
+
+### Avg Human Height
+* how??
+
+### Ra Va's
+* exp = proc outcome unknown
+* samp space = all poss outcomes
+* RaVa = fn map outcome to number
+* ex: 2 dice add'em, multi 'em
+
+### Discrete RaVa
+* finite/countably infinite
+* p.m.f. non-negative, all add to 1
+* $x_i, p(x_i)$ prob distro
+* cumu distro
+
+### Cont RaVa
+* uncountably inf
+* p.d.f. integrate to 1, non-neg
+* can be bounded
+* cumu distr
+
+### Expected Val
+* iterated expectation
+* $X,Y$ indep
+* var[X+Y] = var[X] + var[Y] X,Y indep
+* $\rho_{X,Y} = \frac{E[(X-E[X])(Y-E[Y])]}{\sqrt{Var[X]Var[Y]}}$
+
+### Common Discrete Distro
+* bernoulli, binom, poisson
+
+### Common Cont Distro
+* uni, Gaus, t-distro, exponential
+
+### Stat Concepts
+* descrip stat: summary of collec
+* inferential: make statements about larger based on sample data
+* sampling
+  * w replacement
+    * only see 2/3 of values (for enough # of samples)
+  * w/o replacement
+* pop vs samp param
+  * est pop param based on rand samp
+* $\theta$ is param, $\hat{\theta}$ is estimator
+  * if expec of estimator is actual then $\hat{\theta}$ is unbiased
+  * standard error (samp) vs std dev (pop)
+* confidence int $\hat{\mu} \pm z_{0.975} se_{\hat{\mu}}$
+
+### Rand Num Gen
+* in R
+ * `rnorm(3)`
+ * set.seed(1)
+ * will replicate rnorm outcome
+ * rbinom, rpoisson
+
+### Sim of Model Outputs
+* suppose $Y = f(X)$
+* we know $X$, but want $Y$ get by:
+  * derive distro
+  * simulated
+
+### Sim of Regr DAta
+* $Y = \beta_0 \beta \cdot X$ $X \sim U(0,100), \epsilon \sim N(0,1)$
+
+### Variance of Samp Mean
+* rand samp hum height
+
+### Samp Distro
+* normally distr, 
+* sample of sample w replacement (norm distr also)
+* do it 9 times, each distr is sim, but diff (since w replacement)
+* what if then sample mean of each of the 9???
+  * also norm distr 
+
+### Bootstrapping
+1. sample as many as main sample size (e.g. 500)
+2. repeat this a buncha times (9 times in prev ex)
+* $\hat{\mu}$ and get confidence interval on the mean
+
+#### what is it good for?
+* provide est when parametric assumptions violated (e.g. non-Gaussian)
+* can use for regr...non-normal and can't believe p vals...so what is pval?
+  * can bootstrap to get true vals for $\beta$'s
+
+#### the difference
+* next data is transplant...
+* diff UNC-UVA>>bootstrap>>plot mean of bootstrapping...does it encompass 0?
+* if not reject null
+
+#### The Method Example
+1. for each year subtract UNC-UVA
+2. plot as histogram (26 years)
+3. bootstrap (500 times of 26 sampled points)
+4. plot mean of bootstrapped data (mean of means)
+5. does conf int encompass 0?

@@ -1,0 +1,79 @@
+Bootstrapping 2
+========================================================
+
+Lecture
+-------
+
+### Concepts in Stat
+* _same size as orig_
+
+### Bootstrapping Overview
+* no assumptions about distro...
+
+> Why does this work?
+> Why do we do the other things?
+
+### Bootstrap Sample Means
+1. _pick 5 numbers b/w 1 and 10:_ 
+  * 1, 5, 6, 3, 7
+2. _pick 5 from the orig set w/ replacement some number of times
+   (4 here):_
+  * 1, 3, 7, 7, 6
+  * ...
+```{r}
+  s = c(1,5,7,3,6)
+mean(s)
+two = c(1,3,7,7,6)
+mean(two)
+```
+3. What is the std error of sample mean?
+   What are the confidence intervals?
+   _how to make percentile confidence interval?_ 
+   2.5% on left, 2.5% on right and _voila_ have 95% confidence interval
+   _what happens when more bootstrap samples are taken?_ std err approaches theoretical
+  * why does this happen? law of large numbers
+* Mostly limited by computing power
+* could repeat above procedure for std err, etc.
+
+### Plug in estimates
+* $\hat{F}$ in place of actual parameter
+* $\hat{F}$ is for bootstrapped param
+* $F$ is for `actual'
+
+### Boostrap Confidence Int
+* percentile intervals
+* $BC_{\alpha}$ bias corrected
+* $ABC$ approximate bootstrap confidence
+
+### BS Hyp Test
+* $H_0: \hat{\theta} = 0$ 
+* $(\hat{\theta_{lo}}, \hat{\theta_{up}}$ confidence int...if $0\notin$ conf int
+
+### Mult Lin Regr
+* $y = \beta_0 + \mathbf{\beta}\cdot\mathbf{X} + \epsilon$
+* recall assumptions (p. 17)
+#### t-test
+* does $Y$ depend on $X$?
+* t-test relies on some assumptions...if they fail (after all else)
+  BOOTSTRAP
+
+### BS-ing Regr
+* generate new samples from data
+* data set $D = {\vec{d_1}, \vec{d_2},\ldots,\vec{d_n}}$
+* bootstrap with indiv $\vec{d_i}$ $B$ times
+* so you'll have $B$ $\beta_i$'s where $i \in [0,n]$
+* now have $\mu(\beta_i)$ and confidence intervals
+* if conf int include 0...$\beta_i$ is NOT stat sign 
+* fail to reject the null
+> do we pick the beta's we want to use first? or go through them all w BSing
+
+### BS-ing Residuals
+* __residuals__ $y - \hat{y}$
+* for each obs $\vec{d_i}$ you have a residual $\hat{y} + \
+* for each obs resi...BS this...and use to create new responses...
+
+### BS Est of Pred Err
+* BS-ing the MSE...
+* optimism...M* on D* should be good...i think it'll be good on D (original 
+  data)
+

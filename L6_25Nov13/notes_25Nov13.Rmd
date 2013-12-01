@@ -1,0 +1,136 @@
+
+ - is Uva performing well liver and kidney?
+
+### Situation
+ - center plot, raph analy, count of trans (just kidney liver)
+ - count of ethnicities (white vs non-white)
+ - observations (where doing better?) vast diff in term of ethnicities
+  - good white, bad on minorities
+ - tell us that need better job at recruit patient from other
+ - use Med college of VA as comparison (need to perform at least as well)
+ - MCV good at nonwhite, UVa good at white
+ - have enough for 3/4 of 
+ - ...
+ - counts at diff centers, diff ethnicities
+
+### Goal
+ - increase kidney
+ - __propose design for improvement kid/liv trans__
+ - look at trans in terms of makeup of donors
+ - potl diff in # of trans in terms of makeup of donors
+ - building in terms o
+ - increase # of kid/liv trnsplants
+> want more people to get transplants here, more centers in diff areas
+> 2006 uva cent in Roanoke, # of liver trans increased (overall)
+> one way to recruit more patients
+
+### Metrics
+ - LRM, TS
+ - how to eval? MSE, adjR, AIC (e.g.)
+ - 1-2 sentences
+
+### Hypo
+> next time test effect of Roanoke
+ - diff b/w MCV and UVa
+ - based on situ...choose center to compare UVa to
+ - is there a diff b/w forecast of UVa and MCV
+ - forecast for 2013 use sim/BS and is diff close to zero
+ 2. UVa perform well on white, model on UVa vs another center (include MCV!!)
+> need 2 hypotheses
+> plus 2 more for Roanoke center
+
+### Data
+ 1. cite org trans data
+
+### Analysis and ...
+ - selection of models
+### Evidence
+ - diagnostics etc
+> 3/4 of report in those 2
+
+ 1. diff b/w uva and MCV (e.g.) 
+ 2. diff b/w minority patients
+ - count and proport
+ - want diff close to zero
+ - build linear model in terms of R11 donors
+ - recruiting, research on new center
+ - only have data on counts
+ - to design another study, would need to look deep into what we have
+ - need to motivate hypoth
+ 
+ - form hypo based on situ, build model based on hypo
+
+
+
+Lecture/New Material
+--------------------
+
+### TS
+ - corr in prior year comp to now?
+ - relat w gen'l linear model
+ - eval resid for
+ - ARIMA models (not much on MA in this project)
+   - mostly serial corr in this proj
+
+### BS TS
+ - BS want to resamp resid, act y - est y
+ - resamp in term of that
+ - y* = fit y + resid
+ - regress on y*
+
+### TS Ex
+ - want expo/sinus decay then to PACF
+ - for example...have 1 lag
+
+### TS Mod
+ - AR function
+ - walker or maximum liklihood
+ - walker does based on AIC
+ - ACF/PACF may not match what you come up with
+
+### Results from TS BS
+ - ...
+
+### UVa Trans Cent
+ - _chart is shown_ 
+ - build a model based on difference between the two
+ - t-test b/w means...
+
+### Diff b/w MCVandUVA
+ - what is a well formed hypothesis???
+ - __is forecast going to be zero (or will it be negative)?__
+ - how to test this?
+   - build model etc...
+
+#### ACF/PACF
+ - corr need to account for
+ - AR(1) model...
+
+#### DIAGS for AR(1)
+ - look at AIC at diff lags
+ - what is your conclusion? AR(1) is best choice
+ - look at forecast and confd int to make guess
+
+#### forecast
+ - cannot reject the null
+> policy changes??? 
+
+### Simulation
+ - R11 donors not known
+ - use to come up w more realistic value for 2013
+
+### Many Def'ns
+ - gen pseudo random data from already existing data
+ - approx of reality
+
+### Monte Carlo
+ - choose pseudo random draws for sim
+
+### Where used?
+ - computer experiments used when unable to actually run experiments
+
+### Monty Hall Problem
+ - ...
+
+### More Reasons
+ - ...

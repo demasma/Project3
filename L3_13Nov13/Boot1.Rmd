@@ -1,0 +1,96 @@
+```{r}
+source("../DATALOADER.R")
+#***************************************************************
+#
+#  	  Transplant Center 
+#	  Bootstrapping 1
+#
+#***************************************************************
+
+
+#***************************************************************
+#
+#  Read in the data
+#
+#***************************************************************
+
+#Read data
+# r11xplant <- read.table("R11xplant.csv", sep = ",", header = T)
+# 
+# r11donor<-read.table("R11donor.csv", sep = ",", header = T)
+# 
+# uva <- read.table("UVAxplant.csv", sep = ",", header = T)
+# 
+# duke <- read.table("Dukexplant.csv", sep = ",", header = T)
+# 
+# mcv <- read.table("MCVxplant.csv", sep = ",", header = T)
+# 
+# unc <- read.table("UNCxplant.csv", sep = ",", header = T)
+# 
+# setwd(rcodepath)
+
+#Source the bootstrapping functions
+library(boot) #If you don't have this library, install it by: install.packages('boot')
+
+# source("TSbootfunctions.R")
+
+#***************************************************************
+#
+# Bootstrap the differences
+#
+#***************************************************************
+
+# UVa-MCV Differences in Kidney Transplants 
+uva.kidney<-uva$Kidney
+mcv.kidney<-mcv$Kidney
+
+##compute the difference between uva kidney transplants and mcv kidney transplants from 1988 to 2011
+kid.diff<-ts(uva.kidney-mcv.kidney,1988,2011)
+
+# perform a paired t-test
+t.test(uva.kidney, mcv.kidney,paired=T)
+
+##what are the results?
+
+# plot the differences:
+ts.plot(kid.diff,ylab='UVa-MCV',main = "Difference in Number of Transplants, UVA-MCV")
+
+#Bootstrap the differences of the means 
+bs.mean<-function(x,i)
+{
+  return(mean(x[i]))
+}
+
+##Bootstrap mean differences - syntax: boot(data= , statistic= , R= ) where R = number of replications, statistic=bs.mean
+bs.kid.diff<-boot(kid.diff,bs.mean,R=2000)
+
+##view the results 
+bs.kid.diff
+
+##plot the bootstrap results.  what do you observe?
+plot(bs.kid.diff,index=1) 
+
+##find the confidence intervals for bs.kid.diff using bca and percentile
+boot.ci(bs.kid.diff,0.95,type=c('bca','perc'))
+
+```
+### Couldn't reject the null...
+* so we will run more than 2000
+```{r}
+##Bootstrap mean differences - syntax: boot(data= , statistic= , R= ) where R = number of replications, statistic=bs.mean
+bs.kid.diff<-boot(kid.diff,bs.mean,R=10000)
+
+##view the results 
+bs.kid.diff
+
+##plot the bootstrap results.  what do you observe?
+plot(bs.kid.diff,index=1) 
+
+##find the confidence intervals for bs.kid.diff using bca and percentile
+boot.ci(bs.kid.diff,0.95,type=c('bca','perc'))
+
+
+##Repeat the same process for liver transplants between UVA & Duke
+##interperet results
+
+```

@@ -1,0 +1,28 @@
+Bootstrapping (cont'd)
+======================
+
+Lecture
+-------
+
+### BS-ing LRMs
+* model for each dataset BS'd (500 or whatever $\beta_0$'s etc)
+* and get confidence intervals on 
+
+### BSing Regr of ACCDMG
+
+#### example 1
+* fail to reject...confidence interval includes 0
+
+#### example 2
+* run more replicates...could get something stat signf...but is it meaningful?
+* example if signf...$0.00001/incr-in-year-age
+
+### Example
+* $y$ UVA kidney
+* $x$ region 11 donors
+* $y_i = \beta_0 + \beta_1...$
+
+__MISSED A FEW SLIDES HERE__
+
+### TS Exa
+* 
