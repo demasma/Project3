@@ -54,12 +54,18 @@ sd(mcv.kidney)
 
 ##compute the difference between uva kidney transplants and mcv kidney 
 ## transplants from 1988 to 2011
-png("./project/figures/diff_liver.png", width=900, height=900)#, pointsize=30)
-par(mfrow=c(3,1), ps=20)
 mcv.liv.diff <- ts(uva.liver-mcv.liver,1988,2012)
 unc.liv.diff <- ts(uva.liver-unc.liver,1988,2012)
 duke.liv.diff <- ts(uva.liver-duke.liver,1988,2012)
 liv.diff <- data.frame(mcv=mcv.liv.diff, unc=unc.liv.diff, duke=duke.liv.diff)
+
+mcv.kid.diff <- ts(uva.kidney-mcv.kidney,1988,2012)
+unc.kid.diff <- ts(uva.kidney-unc.kidney,1988,2012)
+duke.kid.diff <- ts(uva.kidney-unc.kidney,1988,2012)
+kid.diff <- data.frame(mcv=mcv.kid.diff, unc=unc.kid.diff, duke=duke.kid.diff)
+
+png("./project/figures/diff_liver.png", width=900, height=900)#, pointsize=30)
+par(mfrow=c(3,1), ps=20)
 ts.plot(mcv.liv.diff,ylab='UVa-MCV',
         main = "Difference in Number of Liver Transplants, UVA-MCV")
 abline(0,0,lty=3)
@@ -74,10 +80,6 @@ dev.off()
 
 png("./project/figures/diff_kidney.png", width=900, height=900)#, pointsize=30)
 par(mfrow=c(3,1), ps=20)
-mcv.kid.diff <- ts(uva.kidney-mcv.kidney,1988,2012)
-unc.kid.diff <- ts(uva.kidney-unc.kidney,1988,2012)
-duke.kid.diff <- ts(uva.kidney-unc.kidney,1988,2012)
-kid.diff <- data.frame(mcv=mcv.kid.diff, unc=unc.kid.diff, duke=duke.kid.diff)
 
 ts.plot(mcv.kid.diff,ylab='UVa-MCV',
         main = "Difference in Number of Kidney Transplants, UVA-MCV")
@@ -163,7 +165,14 @@ dev.off()
 par(mfrow=c(1,1), ps=20)
 
 ##find the confidence intervals for bs.kid.diff using bca and percentile
-boot.ci(bs.kid.diff,0.95,type=c('bca','perc'))
+boot.ci(bs.mcv.liv.diff,0.95,type=c('bca','perc'))
+boot.ci(bs.unc.liv.diff,0.95,type=c('bca','perc'))
+boot.ci(bs.duke.liv.diff,0.95,type=c('bca','perc'))
+
+boot.ci(bs.mcv.kid.diff,0.95,type=c('bca','perc'))
+boot.ci(bs.unc.kid.diff,0.95,type=c('bca','perc'))
+boot.ci(bs.duke.kid.diff,0.95,type=c('bca','perc'))
+#boot.ci(bs.kid.diff,0.95,type=c('bca','perc'))
 
 
 ##Repeat the same process for liver transplants between UVA & Duke
