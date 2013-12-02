@@ -94,8 +94,14 @@ dev.off()
 plot(kid.diff)
 
 # perform a paired t-test
+
+t.test(uva.liver, mcv.liver,paired=T)
+t.test(uva.liver, unc.liver,paired=T)
+t.test(uva.liver, duke.liver,paired=T)
+
 t.test(uva.kidney, mcv.kidney,paired=T)
-t.test(uva.kidney, mcv.kidney,paired=F)
+t.test(uva.kidney, duke.kidney,paired=T)
+t.test(uva.kidney, unc.kidney,paired=T)
 
 ##what are the results?
 
@@ -109,17 +115,52 @@ bs.mean<-function(x,i)
   return(mean(x[i]))
 }
 
-bs.mean(kid.diff)
 
 ##Bootstrap mean differences - syntax: boot(data= , statistic= , R= ) where R = number of replications, statistic=bs.mean
 bs.kid.diff<-boot(kid.diff,bs.mean,R=2000)
-bs.kid.diff<-boot(kid.diff,bs.mean,R=50000)
+
+bs.mcv.liv.diff<-boot(mcv.liv.diff,bs.mean,R=50000)
+bs.unc.liv.diff<-boot(unc.liv.diff,bs.mean,R=50000)
+bs.duke.liv.diff<-boot(duke.liv.diff,bs.mean,R=50000)
+bs.mcv.liv.diff
+bs.unc.liv.diff
+bs.duke.liv.diff
+
+bs.mcv.kid.diff<-boot(mcv.kid.diff,bs.mean,R=50000)
+bs.unc.kid.diff<-boot(unc.kid.diff,bs.mean,R=50000)
+bs.duke.kid.diff<-boot(duke.kid.diff,bs.mean,R=50000)
+bs.mcv.kid.diff
+bs.unc.kid.diff
+bs.duke.kid.diff
+
 kid.diff
 ##view the results 
 bs.kid.diff
 
 ##plot the bootstrap results.  what do you observe?
-plot(bs.kid.diff,index=1)
+par(mfrow=c(1,1), ps=20)
+png("./project/figures/boot_mcv_liver.png", width=700, height=900)#, pointsize=30)
+plot(bs.mcv.liv.diff,index=1, main="Bootstrapped Mean Difference UVa and MCV")
+dev.off()
+png("./project/figures/boot_unc_liver.png", width=700, height=900)#, pointsize=30)
+plot(bs.unc.liv.diff,index=1)
+dev.off()
+png("./project/figures/boot_duke_liver.png", width=700, height=900)#, pointsize=30)
+plot(bs.duke.liv.diff,index=1)
+dev.off()
+par(mfrow=c(1,1), ps=20)
+
+par(mfrow=c(1,1), ps=70)
+png("./project/figures/boot_mcv_kidney.png", width=700, height=900)#, pointsize=30)
+plot(bs.mcv.kid.diff,index=1)
+dev.off()
+png("./project/figures/boot_unc_kidney.png", width=700, height=900)#, pointsize=30)
+plot(bs.unc.kid.diff,index=1)
+dev.off()
+png("./project/figures/boot_duke_kidney.png", width=700, height=900)#, pointsize=30)
+plot(bs.duke.kid.diff,index=1)
+dev.off()
+par(mfrow=c(1,1), ps=20)
 
 ##find the confidence intervals for bs.kid.diff using bca and percentile
 boot.ci(bs.kid.diff,0.95,type=c('bca','perc'))
