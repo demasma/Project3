@@ -1,0 +1,424 @@
+```{r}
+#***************************************************************
+#***************************************************************
+#
+#  Designs to improve numbers of Treated Liver Transplant Patients
+#
+#***************************************************************
+#***************************************************************
+
+
+
+#***************************************************************
+#
+#  Read in the data
+#
+#***************************************************************
+
+setwd("../TransplantData/")
+r11donor <- read.table("R11donor.csv", sep = ",", header = T)
+
+r11xplant <- read.table("R11xplant.csv", sep = ",", header = T)
+
+uva <- read.table("UVAxplant.csv", sep = ",", header = T)
+
+duke <- read.table("Dukexplant.csv", sep = ",", header = T)
+
+mcv <- read.table("MCVxplant.csv", sep = ",", header = T)
+
+unc <- read.table("UNCxplant.csv", sep = ",", header = T)
+
+setwd("..")
+#**********************************************
+
+source("Transplant.plots.R")
+source("TSbootfunctions.R")
+library(boot)
+library(forecast)
+
+
+#**********************************************
+
+
+#*********************************************
+#  
+#		Plotting Liver Transplants
+#
+#*********************************************
+
+# Region plot
+
+region.plot(cbind(r11.xplant$Liver[-26], r11.donor$Liver[-26], uva.xplant$Liver[-26], unc.xplant$Liver[-26], mcv.xplant$Liver[-26], duke.xplant$Liver[-26]),Year = seq(1988,2012), title = "Liver Transplants")
+
+# Center plot
+center.plot(cbind(uva.xplant$Liver[-26], unc.xplant$Liver[-26], mcv.xplant$Liver[-26], duke.xplant$Liver[-26]), Year = seq(1988,2012), title = "Liver Transplants")
+```
+- we were the worst in kidney transplants
+- in 2005, Roanoke center (increased the liver transplants...well we think it
+   did)
+- _did the roanoke center increase liver transplants?_
+- we'll stop looking at how UVa comp to other and instead why UVa do better?
+```{r}
+##What do you observe in the center plot?  How is UVA compared to other centers in Liver transplants?
+
+plot(seq(1988,2012), uva$Liver[-26], type = "l", col = "orange", ylim = c(min(mcv$Liver),max(uva$Liver)), xlab = "Years", ylab = "Transplants")
+lines(seq(1988,2012), mcv$Liver[-26], col = "black")
+lines(seq(1988,2012), duke$Liver[-26], col = "blue3")
+
+legend(1990,85, legend = c("UVA", "MCV", "Duke"), col = c("orange", "black", "blue3"), lwd = 2)
+
+#*********************************************
+#  
+#			Transplant Center
+#		Classical Tests for Effectiveness of Center
+#
+#*********************************************
+
+# In 2005, UVA opened a new tranplant center in Roanoke
+# Test of center contribution - 1988-2004 vs 2005-2013
+
+t.test(uva$Liver[1:17], uva$Liver[18:26])
+
+wilcox.test(uva$Liver[1:17], uva$Liver[18:26])
+```
+- wilcox says there is a tie...
+```{r}
+
+##Interpert the results of the t-test.  Is there a difference before and after the Roanoke center?
+
+#*********************************************
+#  
+#		Time Series for Liver Transplants
+#
+#*********************************************
+
+par(mfrow = c(1,2))
+acf(uva$Liver)
+pacf(uva$Liver)
+par(mfrow = c(1,1))
+
+uva.arma <- auto.arima(uva$Liver)
+
+uva.arma 
+
+par(mfrow = c(1,2))
+acf(uva.arma$resid)
+pacf(uva.arma$resid)
+par(mfrow = c(1,1))
+
+plot(1988:2013,uva.arma$resid, type = "l", xlab = "Years", ylab = "Residuals", main = "UVA ARMA Model Residuals")
+
+# Classical tests again
+
+t.test(uva.arma$resid[1:17], uva.arma$resid[18:26])
+
+wilcox.test(uva.arma$resid[1:17], uva.arma$resid[18:26])
+
+# But this does not control for Region 11 or for the center.
+
+#*******************************************
+#
+#  	Time Series and Linear Models
+#
+#*******************************************
+
+
+# Linear Model of Liver transplants at UVA
+
+uva.Liv <- lm(uva$Liver[-26]~r11donor$Liver[-26])
+
+summary(uva.Liv)
+
+# diagnostics
+par(mfrow = c(2,2))
+plot(uva.Liv)
+par(mfrow = c(1,1))
+
+## Diagnostic plot issues?
+```
+- non constant variance
+- QQ plot...not normal
+- will build both LM and PoissonGLM
+```{r}
+# Evaluating correlation
+par(mfcol = c(1,2))
+acf(uva.Liv$residuals)
+pacf(uva.Liv$residuals)
+par(mfcol = c(1,1))
+
+## Is there any serial correlation?
+```
+- AR term of 1 may be needed
+```{r}
+
+library(MASS)
+boxcox(uva.Liv)
+```
+- box-cox (diag not good, so maybe consider B-C trans
+- look at the $\lambda$ at the peak, which is close to 1
+- so the transform probably won't help us...but nice to consider
+```{r}
+#*********************************************
+#  
+#		Center Model
+#
+#*********************************************
+
+Roan <- c(rep(0, 17), rep(1, 8))
+```
+- roan...0 for first 17 years, and 1 for the last 8 years
+```{r}
+uva.liv2 <- lm(uva$Liver[-26]~Roan + r11donor$Liver[-26])
+```
+- model based on the Roanoke center as a predictor
+```{r}
+summary(uva.liv2)
+```
+- model is signif, but roan predictor is not really signif
+```{r}
+par(mfrow = c(2,2))
+plot(uva.liv2)
+par(mfrow = c(1,1))
+
+
+par(mfrow = c(1,2))
+acf(uva.liv2$resid, main = "ACF for Resid from RS1")
+pacf(uva.liv2$resid, main = "PACF for Resid from RS1")
+par(mfrow = c(1,1))
+
+#******************************************************
+#  
+#	Linear Model with Time Series for Liver Transplants
+#
+#*****************************************************
+
+# time series model for the correlated residuals
+
+uvaliv.ar <- ar(uva.liv2$resid)
+uvaliv.ar
+plot(uvaliv.ar$aic, type = "h", ylab = "AIC")
+uvaliv.ar$aic
+```
+- 1 has the best AIC val
+```{r}
+# Model with AR(1)
+
+uva.liv3 <- lm(uva$Liver[2:25]~Roan[2:25] + r11donor$Liver[2:25]+uva.liv2$resid[1:24])
+
+summary(uva.liv3)
+```
+- roan pred is signif, model is signif with AR(1)
+```{r}
+par(mfrow = c(2,2))
+plot(uva.liv3)
+par(mfrow = c(1,1))
+
+par(mfrow = c(1,2))
+acf(uva.liv3$resid, main = "ACF for Resid from RS2")
+pacf(uva.liv3$resid, main = "PACF for Resid from RS2")
+par(mfrow = c(1,1))
+```
+- doesn't look like we need to add any more terms to AR model
+- now to get the BS C.I. for the roan center
+```{r}
+
+#    Get the fitted values from the regression model
+uva.fit <- fitted(uva.liv3)
+#    Get the residuals from the regression model
+uva.le <- residuals(uva.liv3)
+#    Get the regression model
+uva.mod <- model.matrix(uva.liv3)
+#     Use the RTSB function to obtain the bootstrap
+uva.liv.boot <- RTSB(uva$Liver[2:25], Roan[2:25], uva.fit, uva.le, uva.mod,2000)
+#     The estimates
+uva.liv.boot
+#    Plot the results for the coeffiecient for the center
+plot(uva.liv.boot, index = 2)
+
+boot.ci(uva.liv.boot, index = 2)
+
+## What can we we conclude about the Roanoke Center?
+```
+- what about it???
+- the roan center is signif...check out the c.i.'s
+- BUT we haven't even done the PoissonGLM
+- _note: no forecasting done here could have another Hypo about the forecasted
+  values_
+- __analysis:__ what is your model
+- __evidence:__ graphs etc
+- steps for LM have roan cent compare roan center to one w/o
+- put models that start with and describe proc in analysis
+- what type of bootstrapping are you going to to (put that in analysis sec)
+- __analysis__ describe the modeling process (I'll start with model 'x', then do
+  'x,y,z' actions etc etc
+- talk about what you're going to do...(in the analysis sec) 
+```{r}
+#*********************************************
+#  
+#		Poisson Model for Liver Transplants
+#
+#*********************************************
+
+hist(uva$Liver, breaks = 20)
+```
+- not gaussian, so build PGLM
+```{r}
+#rug draws ticks for each value
+rug(uva$Liver)
+
+#Without time series
+ldf = data.frame(UVAL = uva$Liver[1:25], R11D = r11donor$Liver[1:25])
+
+
+uva.liv.glm <- glm(UVAL ~ ., data = ldf, family = poisson)
+
+summary(uva.liv.glm)
+```
+- how to tell if model is signf?
+```{r}
+
+# Model utility test
+
+uva.liv.null <- glm(UVAL~1, data = ldf, family = poisson)
+
+anova(uva.liv.null, uva.liv.glm, test= "Chi")
+```
+- tells us that the model is signf (Pr(>Chi))
+```{r}
+# check dispersion
+
+sum(resid(uva.liv.glm, type = "pearson")^2/uva.liv.glm$df.residual)
+```
+- dipersion is not close to one, so we move on to a Quasi-Poiss
+```{r}
+# Quasi-poisson model
+
+uva.liv.glm2 <- glm(uva$Liver~r11donor$Liver, family = quasipoisson)
+
+summary(uva.liv.glm2)
+```
+- does not have AIC value! why?
+```{r}
+par(mfrow = c(2,2))
+plot(uva.liv.glm2)
+par(mfrow = c(1,1))
+
+# Look at the time series
+
+uva.liv.res <- residuals(uva.liv.glm2, type = "pearson")
+```
+- give the argument "PEARSON"
+```{r}
+par(mfrow = c(1,2))
+acf(uva.liv.res)
+pacf(uva.liv.res)
+par(mfrow = c(1,1))
+```
+- choose AR(1)
+```{r}
+# Model with time series component
+
+ldf = data.frame(UVAL = uva$Liver[2:25], R11D = r11donor$Liver[2:25], LUVAL = uva.liv.res[1:24])
+
+uva.liv.glm3 <- glm(UVAL~., data = ldf, family = quasipoisson)
+
+# Model utility test
+
+uva.liv.null <- glm(UVAL~1, data = ldf, family = quasipoisson)
+
+anova(uva.liv.null, uva.liv.glm3, test= "Chi")
+```
+- still signf
+```{r}
+summary(uva.liv.glm3)
+
+par(mfrow = c(2,2))
+plot(uva.liv.glm3)
+par(mfrow = c(1,1))
+ 
+
+
+# Does the new center affect the results?
+
+Roan <- c(rep(0, 17), rep(1, 8))
+
+ldf = data.frame(UVAL = uva$Liver[2:25], R11D = r11donor$Liver[2:25], LUVAL = uva.liv.res[1:24], Roan = Roan[2:25])
+
+uva.liv.glm4 <- glm(UVAL~., data = ldf, family = quasipoisson)
+```
+- this is our Roanoke model
+```{r}
+summary(uva.liv.glm4)
+```
+- what is this telling us about the roan cent???
+```{r}
+# Model utility test
+
+uva.liv.null <- glm(UVAL~1, data = ldf, family = quasipoisson)
+
+anova(uva.liv.null, uva.liv.glm4, test= "Chi")
+```
+- new model w roan cent is signf
+- haven't yet added resi to null model
+- we'll look at resi from pGLM
+```{r}
+# Diagnostics
+
+par(mfrow = c(2,2))
+plot(uva.liv.glm4)
+par(mfrow = c(1,1))
+
+```
+- how does this compare to the linear model?
+  - was roan cent signf? nope
+  - wh
+```{r}
+# Look for serial correlation
+
+uva.liv.res <- residuals(uva.liv.glm4, type = "pearson")
+
+par(mfrow = c(1,2))
+acf(uva.liv.res)
+pacf(uva.liv.res)
+par(mfrow = c(1,1))
+
+# Test of Roanoke center
+
+uva.liv.nRoan <- glm(UVAL~., data = ldf[,-4], family = quasipoisson)
+```
+- the not roan cent model!
+- takes the data frame we created and subtracts frame (the RoanCent part)
+```{r}
+anova(uva.liv.nRoan, uva.liv.glm4, test= "Chi")
+```
+- what does this last bit tell us about RoanCent?
+- qpGLM says it RC is not signf
+- LM says that it is signf
+- can we say that RC is signf by itself???
+  - fail to reject the null hypo??
+  - back up this with c.i.'s etc
+  - diff b/w before and after RoCe
+  - would building a new center help???
+    - what is your answer?
+    - what are we not taking into account? (cnt at Cville vs Roan UVa centers)
+    - don't have the amt of info to
+    
+- __GRAD STUDENTS:__ do the same thing for Kidney trans...
+
+Project
+--------
+### Hypotheses
+- UVA vs DUKE
+- UVA vs DUKE (non-white)
+  - not consider white...b/c we're good on white people
+- is the RoCe signf for:
+  - liver?
+  - kidney?
+### Recom.
+- we have contradictory results (qpGLM and LM)
+- include this in reco along with c.i.'s to back up the recom
+- __THIS IS REAL LIFE__ won't always get perfect results
+- _if propose to build new center_ need more data to collect
+  - __GRAD STUDENTS__ look at htis is final proj??
+### Forecasting
+- AR(1) term confusion in some part of this file
