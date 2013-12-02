@@ -11,7 +11,9 @@
 #   source(r.code.files[i])
 # }
 
-setwd("~/Google Drive/UVaGrad/6021/Project3/TransplantData")
+setwd("~/Projects")
+#setwd("~/Documents/UVaGrad/Fall2013/SYS6021/")
+setwd("./Project3/TransplantData")
 r11.donor<-read.table("R11donor.csv", sep = ",", header = T)
 us.donor<-read.table("USdonor.csv", sep = ",", header = T)
 
@@ -60,7 +62,10 @@ eth <- merge(eth, r11.eth, all.x=TRUE, all.y=TRUE)
 
 eth$Location <- factor(eth$Location)
 
-setwd("~/Google Drive/UVaGrad/6021/RCode/")
+#setwd("~/Google Drive/UVaGrad/6021/RCode/")
+setwd("~/Projects")
+#setwd("~/Documents/UVaGrad/Fall2013/SYS6021/")
+setwd("./RCode/")
 # source("TSbootfunctions.R")
 # source("SPM_Panel.R")
 # source("Transplant.plots.R")
@@ -72,7 +77,9 @@ for (i in 1:length(r.code.files)) {
   source(r.code.files[i])
   }
 
-setwd("~/Documents/UVaGrad/Fall2013/SYS6021/Project3/")
+setwd("~/Projects")
+#setwd("~/Documents/UVaGrad/Fall2013/SYS6021/")
+setwd("./Project3/")
 
 uva.xplant <- uva.xplant[-26, c("Year", "Liver", "Liver_DD", "Liver_LD","Kidney", "Kidney_DD", "Kidney_LD")]
 mcv.xplant <- mcv.xplant[-26, c("Year","Liver", "Liver_DD", "Liver_LD","Kidney", "Kidney_DD", "Kidney_LD")  ]

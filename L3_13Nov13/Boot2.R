@@ -4,32 +4,48 @@
 #
 #***************************************************************
 
+setwd("~/Box Documents/")
 ##  Source the bootstrapping functions and load the 'boot' library
 
 
 #Kidney Model:
 
 ##  Build a linear model, uva.kid.lm that predicts uva kidney transplants by region 11 kidney donors from 1988-2011 (exclude 2012)
-
-
+uva.liv.lm <- lm(uva.xplant$Liver ~ r11.donor$Liver)
+uva.kid.lm <- lm(uva.xplant$Kidney ~ r11.donor$Kidney)
 
 ##  Use summary to evaluate the model
 ##  Is your model significant?  r11donor$Kidney?
-
+summary(uva.liv.lm)
+summary(uva.kid.lm)
 
 
 ##  Plot diagnostics uva.kid.lm.  What do you examine?
 
+png("./project/figures/diag_liv_uva-r11.png", width=900, height=900)#, pointsize=30)
+par(mfrow=c(2,2), ps=20)
+plot(uva.liv.lm)
+dev.off()
+par(mfrow=c(1,1))
+
+
+png("./project/figures/diag_kid_uva-r11.png", width=900, height=900)#, pointsize=30)
+par(mfrow=c(2,2), ps=20)
+plot(uva.kid.lm)
+par(mfrow=c(1,1))
+dev.off()
 
 #  Bootstrapping the linear model
 
 ##  Get the fitted values from the regression model uva.kid.lm and store in uva.kfit
 ##  use the fitted() function with the linear model as the option
+uva.lfit <- fitted(uva.liv.lm)
 uva.kfit <- fitted(uva.kid.lm)
 
 ##  Get the residuals from the regression model uva.kid.lm and store in uva.ke
 ##  Hint: use the residuals() function with the linear model as the option
-
+uva.le <- residuals(uva.liv.lm)
+uva.ke <- residuals(uva.kid.lm)
 
 
 #  Get the regression model for uva.kid.lm- model.matrix()
