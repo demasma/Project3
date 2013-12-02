@@ -72,7 +72,7 @@ for (i in 1:length(r.code.files)) {
   source(r.code.files[i])
   }
 
-setwd("~/Google Drive/UVaGrad/6021/Project3/")
+setwd("~/Documents/UVaGrad/Fall2013/SYS6021/Project3/")
 
 uva.xplant <- uva.xplant[-26, c("Year", "Liver", "Liver_DD", "Liver_LD","Kidney", "Kidney_DD", "Kidney_LD")]
 mcv.xplant <- mcv.xplant[-26, c("Year","Liver", "Liver_DD", "Liver_LD","Kidney", "Kidney_DD", "Kidney_LD")  ]
