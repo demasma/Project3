@@ -25,7 +25,7 @@ mcv <- read.table("MCVxplant.csv", sep = ",", header = T)
 
 unc <- read.table("UNCxplant.csv", sep = ",", header = T)
 
-setwd(rcodepath)
+setwd("~/Box Documents/")
 
 #Source the bootstrapping functions
 library(boot) #If you don't have this library, install it by: install.packages('boot')
@@ -61,7 +61,7 @@ liv.diff <- data.frame(mcv=mcv.liv.diff, unc=unc.liv.diff, duke=duke.liv.diff)
 
 mcv.kid.diff <- ts(uva.kidney-mcv.kidney,1988,2012)
 unc.kid.diff <- ts(uva.kidney-unc.kidney,1988,2012)
-duke.kid.diff <- ts(uva.kidney-unc.kidney,1988,2012)
+duke.kid.diff <- ts(uva.kidney-duke.kidney,1988,2012)
 kid.diff <- data.frame(mcv=mcv.kid.diff, unc=unc.kid.diff, duke=duke.kid.diff)
 
 png("./project/figures/diff_liver.png", width=900, height=900)#, pointsize=30)
@@ -132,6 +132,10 @@ bs.mcv.liv.diff
 bs.unc.liv.diff
 bs.duke.liv.diff
 
+bs.mcv.liv.diff.100k
+bs.unc.liv.diff.100k
+bs.duke.liv.diff.100k
+
 bs.mcv.kid.diff<-boot(mcv.kid.diff,bs.mean,R=50000)
 bs.unc.kid.diff<-boot(unc.kid.diff,bs.mean,R=50000)
 bs.duke.kid.diff<-boot(duke.kid.diff,bs.mean,R=50000)
@@ -143,6 +147,10 @@ bs.duke.kid.diff.100k<-boot(duke.kid.diff,bs.mean,R=100000)
 bs.mcv.kid.diff
 bs.unc.kid.diff
 bs.duke.kid.diff
+
+bs.mcv.kid.diff.100k
+bs.unc.kid.diff.100k
+bs.duke.kid.diff.100k
 
 kid.diff
 ##view the results 
