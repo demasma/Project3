@@ -124,6 +124,10 @@ bs.kid.diff<-boot(kid.diff,bs.mean,R=2000)
 bs.mcv.liv.diff<-boot(mcv.liv.diff,bs.mean,R=50000)
 bs.unc.liv.diff<-boot(unc.liv.diff,bs.mean,R=50000)
 bs.duke.liv.diff<-boot(duke.liv.diff,bs.mean,R=50000)
+
+bs.mcv.liv.diff.100k<-boot(mcv.liv.diff,bs.mean,R=100000)
+bs.unc.liv.diff.100k<-boot(unc.liv.diff,bs.mean,R=100000)
+bs.duke.liv.diff.100k<-boot(duke.liv.diff,bs.mean,R=100000)
 bs.mcv.liv.diff
 bs.unc.liv.diff
 bs.duke.liv.diff
@@ -131,6 +135,11 @@ bs.duke.liv.diff
 bs.mcv.kid.diff<-boot(mcv.kid.diff,bs.mean,R=50000)
 bs.unc.kid.diff<-boot(unc.kid.diff,bs.mean,R=50000)
 bs.duke.kid.diff<-boot(duke.kid.diff,bs.mean,R=50000)
+
+bs.mcv.kid.diff.100k<-boot(mcv.kid.diff,bs.mean,R=100000)
+bs.unc.kid.diff.100k<-boot(unc.kid.diff,bs.mean,R=100000)
+bs.duke.kid.diff.100k<-boot(duke.kid.diff,bs.mean,R=100000)
+
 bs.mcv.kid.diff
 bs.unc.kid.diff
 bs.duke.kid.diff
@@ -161,6 +170,7 @@ plot(bs.unc.kid.diff,index=1)
 dev.off()
 png("./project/figures/boot_duke_kidney.png", width=700, height=900)#, pointsize=30)
 plot(bs.duke.kid.diff,index=1)
+plot(bs.duke.kid.diff.100k,index=1)
 dev.off()
 par(mfrow=c(1,1), ps=20)
 
@@ -174,6 +184,14 @@ boot.ci(bs.unc.kid.diff,0.95,type=c('bca','perc'))
 boot.ci(bs.duke.kid.diff,0.95,type=c('bca','perc'))
 #boot.ci(bs.kid.diff,0.95,type=c('bca','perc'))
 
+
+boot.ci(bs.mcv.liv.diff.100k,0.95,type=c('bca','perc'))
+boot.ci(bs.unc.liv.diff.100k,0.95,type=c('bca','perc'))
+boot.ci(bs.duke.liv.diff.100k,0.95,type=c('bca','perc'))
+
+boot.ci(bs.mcv.kid.diff.100k,0.95,type=c('bca','perc'))
+boot.ci(bs.unc.kid.diff.100k,0.95,type=c('bca','perc'))
+boot.ci(bs.duke.kid.diff.100k,0.95,type=c('bca','perc'))
 
 ##Repeat the same process for liver transplants between UVA & Duke
 ##interperet results
