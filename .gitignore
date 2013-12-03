@@ -16,3 +16,9 @@ quizzes/
 *.pdf
 
 .Rproj.user
+
+.RData
+
+.Rhistory
+
+.RData
