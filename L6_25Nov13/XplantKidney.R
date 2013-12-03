@@ -28,7 +28,7 @@ r11donor<-read.table("R11donor.csv", sep = ",", header = T)
 #***************************************************************
 
 # Source 
-setwd(sourcedir)
+setwd("~/Box Documents/project/figures/")
 source("TSbootfunctions.R") # Get the new version of this.
 source("Transplant.plots.R")
 source("DemographicFunctions.R")
@@ -40,12 +40,13 @@ library(forecast)
 # Center plot
 #***********************************
 
-center.plot(cbind( uva$Kidney[-26], unc$Kidney[-26], mcv$Kidney[-26], duke$Kidney[-26]), Year = seq(1988,2012, 1), title = "Kidney")
+#center.plot(cbind( uva$Kidney[-26], unc$Kidney[-26], mcv$Kidney[-26], duke$Kidney[-26]), Year = seq(1988,2012, 1), title = "Kidney")
+center.plot(cbind( uva.xplant$Kidney[-26], unc.xplant$Kidney[-26], mcv.xplant$Kidney[-26], duke.xplant$Kidney[-26]), Year = seq(1988,2012, 1), title = "Kidney")
 
 ##figure for lecture
-center.plot(cbind( uva$Kidney[-26],  mcv$Kidney[-26]), Year = seq(1988,2012, 1), title = "Kidney")
-plot(uva$Year[-26], uva$Kidney[-26], col = "orange", type = "l", ylim = c(min(uva$Kidney), max(mcv$Kidney)), xlab = "Year", ylab = "No. of Transplants", main = "Kidney Transplants")
-lines(mcv$Year[-26], mcv$Kidney[-26], col = "purple")
+center.plot(cbind( uva.xplant$Kidney[-26],  mcv.xplant$Kidney[-26]), Year = seq(1988,2012, 1), title = "Kidney")
+plot(uva.xplant$Year[-26], uva.xplant$Kidney[-26], col = "orange", type = "l", ylim = c(min(uva.xplant$Kidney), max(mcv.xplant$Kidney)), xlab = "Year", ylab = "No. of Transplants", main = "Kidney Transplants")
+lines(mcv.xplant$Year[-26], mcv.xplant$Kidney[-26], col = "purple")
 legend(1990, 120, legend = c("UVA", "MCV"), lwd = 2, col = c("orange", "purple"))
 
 ## What do you conclude from this center plot?
@@ -59,57 +60,108 @@ legend(1990, 120, legend = c("UVA", "MCV"), lwd = 2, col = c("orange", "purple")
 #*******************************************
 
 # Form data sets for the kidney transplants
-
-
-uvaketh <- subdata("Kidney", uvaeth)
-
-mcvketh <- subdata("Kidney", mcveth)
-
-dukeketh <- subdata("Kidney", dukeeth)
-
+colnames(uva.eth)
+uva.l.eth <- uva.eth[-26, which(substr(colnames(uva.eth),1,5) == "Liver")]
+uva.k.eth <- subdata("Kidney", uva.eth)
+mcv.l.eth <- mcv.eth[-26, which(substr(colnames(mcv.eth),1,5) == "Liver")]
+mcv.k.eth <- subdata("Kidney", mcv.eth)
+duke.l.eth <- duke.eth[-26, which(substr(colnames(duke.eth),1,5) == "Liver")]
+duke.k.eth <- subdata("Kidney", duke.eth)
+?subdata
 
 
 # Remove year 2013 and combine all ethnic groups other than white into one category
 
 # UVA
-uvake <- data.frame(uvaketh[-26, "Kidney.W"], Kidney.O = apply(uvaketh[-26,which(colnames(uvaketh) != "Kidney.W")], 1, sum))
+uva.l.e <- data.frame(uva.l.eth[-26, "Liver.W"], Liver.O = apply(uva.l.eth[-26,which(colnames(uva.l.eth) != "Liver.W")], 1, sum))
+uva.l.e <- data.frame(uva.l.eth$Liver.W, Liver.O = apply(uva.l.eth[,which(colnames(uva.l.eth) != "Liver.W")], 1, sum))
+uva.k.e <- data.frame(uva.k.eth[-26, "Kidney.W"], Kidney.O = apply(uva.k.eth[-26,which(colnames(uva.k.eth) != "Kidney.W")], 1, sum))
 
 # MCV
-mcvke <- data.frame(mcvketh[-26, "Kidney.W"], Kidney.O = apply(mcvketh[-26,which(colnames(mcvketh) != "Kidney.W")], 1, sum))
+mcv.l.e <- data.frame(mcv.l.eth[-26, "Liver.W"], Liver.O = apply(mcv.l.eth[-26,which(colnames(mcv.l.eth) != "Liver.W")], 1, sum))
+mcv.k.e <- data.frame(mcv.k.eth[-26, "Kidney.W"], Kidney.O = apply(mcv.k.eth[-26,which(colnames(mcv.k.eth) != "Kidney.W")], 1, sum))
 
 # Duke
-dukeke <- data.frame(dukeketh[-26, "Kidney.W"], Kidney.O = apply(dukeketh[-26,which(colnames(dukeketh) != "Kidney.W")], 1, sum))
+duke.l.e <- data.frame(duke.l.eth[-26, "Liver.W"], Liver.O = apply(duke.l.eth[-26,which(colnames(duke.l.eth) != "Liver.W")], 1, sum))
+duke.k.e <- data.frame(duke.k.eth[-26, "Kidney.W"], Kidney.O = apply(duke.k.eth[-26,which(colnames(duke.k.eth) != "Kidney.W")], 1, sum))
+
 
 # UVA Ethnic plot
-par(mfrow = c(1,3))
-plot(uva$Year[-26], uvake[,1], type = "l", ylim = c(min(uvake), max(uvake)), xlab = "Year", ylab = "No. of Transplants", main = "UVA Transplants by Ethnic Group")
-lines(uva$Year[-26], uvake[,2], col = "green")
+png("eth_liv.png", width=1500, height=900)
+par(mfrow = c(1,3), ps=20)
+#plot(uva.xplant$Year[-26], uva.k.e[,1], type = "l", ylim = c(min(uva.k.e), max(uva.k.e)), xlab = "Year", ylab = "No. of Transplants", main = "UVA Transplants by Ethnic Group")
+plot(uva.xplant$Year[-26], uva.l.e[,1], type = "l", ylim = c(0,100), xlab = "Year", ylab = "No. of Transplants", main = "UVA Transplants by Ethnic Group")
+lines(uva.xplant$Year[-26], uva.l.e[,2], col = "green")
 legend(1990, 70, legend = c("White", "Other"), lwd = 2, col = c("black", "green"))
 
-plot(mcv$Year[-26], mcvke[,1], type = "l", ylim = c(min(mcvke), max(mcvke)), xlab = "Year", ylab = "No. of Transplants", main = "MCV Transplants by Ethnic Group")
-lines(mcv$Year[-26], mcvke[,2], col = "green")
+#plot(mcv.xplant$Year[-26], mcv.k.e[,1], type = "l", ylim = c(min(mcv.k.e), max(mcv.k.e)), xlab = "Year", ylab = "No. of Transplants", main = "MCV Transplants by Ethnic Group")
+plot(mcv.xplant$Year[-26], mcv.l.e[,1], type = "l", ylim = c(0,100), xlab = "Year", ylab = "No. of Transplants", main = "MCV Transplants by Ethnic Group")
+lines(mcv.xplant$Year[-26], mcv.l.e[,2], col = "green")
 legend(1990, 80, legend = c("White", "Other"), lwd = 2, col = c("black", "green"))
 
-plot(duke$Year[-26], dukeke[,1], type = "l", ylim = c(min(dukeke), max(dukeke)), xlab = "Year", ylab = "No. of Transplants", main = "Duke Transplants by Ethnic Group")
-lines(duke$Year[-26], dukeke[,2], col = "green")
+#plot(duke.xplant$Year[-26], duke.k.e[,1], type = "l", ylim = c(min(duke.k.e), max(duke.k.e)), xlab = "Year", ylab = "No. of Transplants", main = "Duke Transplants by Ethnic Group")
+plot(duke.xplant$Year[-26], duke.l.e[,1], type = "l", ylim = c(0,100), xlab = "Year", ylab = "No. of Transplants", main = "Duke Transplants by Ethnic Group")
+lines(duke.xplant$Year[-26], duke.l.e[,2], col = "green")
 legend(1990, 60, legend = c("White", "Other"), lwd = 2, col = c("black", "green"))
 par(mfrow = c(1,1))
+dev.off()
 
+
+# UVA Ethnic plot
+png("eth_kid.png", width=1500, height=900)
+par(mfrow = c(1,3), ps=20)
+#plot(uva.xplant$Year[-26], uva.k.e[,1], type = "l", ylim = c(min(uva.k.e), max(uva.k.e)), xlab = "Year", ylab = "No. of Transplants", main = "UVA Transplants by Ethnic Group")
+plot(uva.xplant$Year[-26], uva.k.e[,1], type = "l", ylim = c(0,100), xlab = "Year", ylab = "No. of Transplants", main = "UVA Transplants by Ethnic Group")
+lines(uva.xplant$Year[-26], uva.k.e[,2], col = "green")
+legend(1990, 70, legend = c("White", "Other"), lwd = 2, col = c("black", "green"))
+
+#plot(mcv.xplant$Year[-26], mcv.k.e[,1], type = "l", ylim = c(min(mcv.k.e), max(mcv.k.e)), xlab = "Year", ylab = "No. of Transplants", main = "MCV Transplants by Ethnic Group")
+plot(mcv.xplant$Year[-26], mcv.k.e[,1], type = "l", ylim = c(0,100), xlab = "Year", ylab = "No. of Transplants", main = "MCV Transplants by Ethnic Group")
+lines(mcv.xplant$Year[-26], mcv.k.e[,2], col = "green")
+legend(1990, 80, legend = c("White", "Other"), lwd = 2, col = c("black", "green"))
+
+#plot(duke.xplant$Year[-26], duke.k.e[,1], type = "l", ylim = c(min(duke.k.e), max(duke.k.e)), xlab = "Year", ylab = "No. of Transplants", main = "Duke Transplants by Ethnic Group")
+plot(duke.xplant$Year[-26], duke.k.e[,1], type = "l", ylim = c(0,100), xlab = "Year", ylab = "No. of Transplants", main = "Duke Transplants by Ethnic Group")
+lines(duke.xplant$Year[-26], duke.k.e[,2], col = "green")
+legend(1990, 60, legend = c("White", "Other"), lwd = 2, col = c("black", "green"))
+par(mfrow = c(1,1))
+dev.off()
 
 ## What do you conclude from these demographic plots?
 
 
 
 # Time series plots at the university medical centers
-plot(uva$Year[-26], uvake[,1], type = "l", ylim = c(10, 100), col = "orange", main = "Transplants for Whites", ylab = "Percent", xlab = "Year")
-lines(uva$Year[-26], mcvke[,1], type = "l", col = "purple")
-lines(uva$Year[-26], dukeke[,1], type = "l", col = "blue3")
+
+png("ts_eth_liv.png", width=900, height=1100)
+par(mfrow = c(2,1), ps=20)
+plot(uva.xplant$Year[-26], uva.l.e[,1], type = "l", ylim = c(10, 100), col = "orange", main = "Transplants for Whites", ylab = "Percent", xlab = "Year")
+lines(uva.xplant$Year[-26], mcv.l.e[,1], type = "l", col = "purple")
+lines(uva.xplant$Year[-26], duke.l.e[,1], type = "l", col = "blue3")
 legend(1990, 100, legend = c("UVA", "MCV", "Duke"), lwd = 2, col = c("orange", "purple", "blue3"))
 
-plot(uva$Year[-26], uvake[,2], type = "l", ylim = c(0, 100), col = "orange", main = "Transplants for Non-Whites", ylab = "Percent", xlab = "Year")
-lines(uva$Year[-26], mcvke[,2], type = "l", col = "purple")
-lines(uva$Year[-26], dukeke[,2], type = "l", col = "blue3")
+plot(uva.xplant$Year[-26], uva.l.e[,2], type = "l", ylim = c(0, 100), col = "orange", main = "Transplants for Non-Whites", ylab = "Percent", xlab = "Year")
+lines(uva.xplant$Year[-26], mcv.l.e[,2], type = "l", col = "purple")
+lines(uva.xplant$Year[-26], duke.l.e[,2], type = "l", col = "blue3")
 legend(1990, 100, legend = c("UVA", "MCV", "Duke"), lwd = 2, col = c("orange", "purple", "blue3"))
+par(mfrow = c(1,1))
+dev.off()
+
+
+
+png("ts_eth_kid.png", width=900, height=1100)
+par(mfrow = c(2,1), ps=20)
+plot(uva.xplant$Year[-26], uva.k.e[,1], type = "l", ylim = c(10, 100), col = "orange", main = "Transplants for Whites", ylab = "Percent", xlab = "Year")
+lines(uva.xplant$Year[-26], mcv.k.e[,1], type = "l", col = "purple")
+lines(uva.xplant$Year[-26], duke.k.e[,1], type = "l", col = "blue3")
+legend(1990, 100, legend = c("UVA", "MCV", "Duke"), lwd = 2, col = c("orange", "purple", "blue3"))
+
+plot(uva.xplant$Year[-26], uva.k.e[,2], type = "l", ylim = c(0, 100), col = "orange", main = "Transplants for Non-Whites", ylab = "Percent", xlab = "Year")
+lines(uva.xplant$Year[-26], mcv.k.e[,2], type = "l", col = "purple")
+lines(uva.xplant$Year[-26], duke.k.e[,2], type = "l", col = "blue3")
+legend(1990, 100, legend = c("UVA", "MCV", "Duke"), lwd = 2, col = c("orange", "purple", "blue3"))
+par(mfrow = c(1,1))
+dev.off()
 
 
 ## What do you conclude from these time series plots?
@@ -135,12 +187,19 @@ par(mfrow = c(1,1))
 
 
 # Classical tests
-t.test(uvake[-26,1], mcvke[-26,1])
-t.test(uvake[-26,1], dukeke[-26,1])
+
+t.test(uva.l.e[-26,1], mcv.l.e[-26,1])
+t.test(uva.l.e[-26,1], duke.l.e[-26,1])
+
+t.test(uva.l.e[-26,2], mcv.l.e[-26,2])
+t.test(uva.l.e[-26,2], duke.l.e[-26,2])
 
 
-t.test(uvake[-26,2], mcvke[-26,2])
-t.test(uvake[-26,2], dukeke[-26,2])
+t.test(uva.k.e[-26,1], mcv.k.e[-26,1])
+t.test(uva.k.e[-26,1], duke.k.e[-26,1])
+
+t.test(uva.k.e[-26,2], mcv.k.e[-26,2])
+t.test(uva.k.e[-26,2], duke.k.e[-26,2])
 
 ## What do you conclude from the t tests?
 
@@ -152,7 +211,7 @@ t.test(uvake[-26,2], dukeke[-26,2])
 #
 #******************************************************************
 
-uvamcv <- uva$Kidney[-26]-mcv$Kidney[-26]
+uvamcv <- uva.xplant$Kidney[-26]-mcv$Kidney[-26]
 
 # Plot the difference between uva and mcv
 plot(uva$Year[-26], uvamcv, col = "blue", type = "l", xlab = "Time", ylab = "MCV - UVA", main = "Difference between Kidney Transplants at UVA and MCV")
