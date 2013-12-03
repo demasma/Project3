@@ -87,7 +87,7 @@ diff.ar <- ar(uva.kid.lm$residuals, method = "yule-walker")
 
 ```{r}
 ##  Add the ar model of the residuals to regression, linear model.
-uva.kid.lm2<- lm(uva$Kidney[3:24]~r11donor$Kidney[3:24]+ uva.kid.lm$residuals[2:23] + uva.kid.lm$residuals[1:22])
+uva.kid.lm2<- lm(uva.xplant$Kidney[3:24]~r11.donor$Kidney[3:24]+ uva.kid.lm$residuals[2:23] + uva.kid.lm$residuals[1:22])
 ##################################################
 ##  use the fitted() function with the linear model as the option
 uva.kfit2 <- fitted(uva.kid.lm2)
