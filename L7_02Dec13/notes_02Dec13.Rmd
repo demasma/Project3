@@ -1,0 +1,35 @@
+Notes on Poisson GLM
+====================
+I missed the very first part of this lecture...
+...but here's what I caught
+ - diff non whites uva mcv
+ - " " uva duke
+ - whites
+ - something else
+
+Lecture
+-------
+- arrivals, etc.
+- another type of GLM
+### GLM Review
+- recall: Spam data (binomial data) (i.e. non-Gaussian distro)
+- __link function:__ exponential, gaussian, etc
+
+### Poisson Distro
+- low prob, over large section of space
+- $\mu = \sigma^2$
+- [_INSERT EQN HERE_]
+- window of time is $n$
+- __LOG IS THE LINK FUNCTION__
+
+### Dispersion
+- _is var inflated comp to what expected?_
+- dispersion? 
+  1. resi mean deviance
+  2. sum of pearson resid
+
+### Method for Disp Adj
+- also have quasi poiss (takes into acct var inflation)
+> we'll use that for liver trans
+- if var not close to 1, use quasi poisson
+
