@@ -1,47 +1,26 @@
+.RData
+.Rhistory
 
+DATALOADER.R
+
+project/
 project/tex/
 project/figure/
 quizzes/
+.Rproj.user/
 
 
 *.tex
 
 *.pper
 
-.Rproj.user/
 
 *.html
 *.png
 *.md
 *.pdf
 
-.Rproj.user
 
-<<<<<<< HEAD
-=======
-project
 
-.RData
 
->>>>>>> 4c7004708f93f7e8be14ed11cdbb0b906e0e1ba7
-.RData
 
-.Rhistory
-
-<<<<<<< HEAD
-.RData
-=======
-.Rhistory
-
-.Rhistory
-
-.RData
-
-.RData
-
-DATALOADER.R
-
-.Rhistory
-
-DATALOADER.R
->>>>>>> 4c7004708f93f7e8be14ed11cdbb0b906e0e1ba7
