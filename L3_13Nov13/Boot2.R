@@ -49,18 +49,21 @@ uva.ke <- residuals(uva.kid.lm)
 
 
 #  Get the regression model for uva.kid.lm- model.matrix()
-uva.mod <- model.matrix(uva.kid.lm)
+uva.lmod <- model.matrix(uva.liv.lm)
+uva.kmod <- model.matrix(uva.kid.lm)
 
 
 ##  Use the RTSB function (from TSbootfunctions.R) to obtain the bootstrap
 ##  distribution for the coefficients. This may take a few minutes.
 ##	Be patient.	
 
-uva.kid.boot <- RTSB(uva$Kidney[-25], r11donor$Kidney[-25], uva.kfit, uva.ke, uva.mod,2000)
+uva.liv.boot <- RTSB(uva.xplant$Liver, r11.donor$Liver, uva.lfit, uva.le, uva.lmod, 2000)
+uva.kid.boot <- RTSB(uva.xplant$Kidney, r11.donor$Kidney, uva.kfit, uva.ke, uva.kmod, 2000)
 
 
 ##  What are the estimates in uva.kid.boot? compare with summary on orignal model
-
+summary(uva.liv.boot)
+summary(uva.kid.boot)
 
 
 
@@ -69,19 +72,44 @@ uva.kid.boot <- RTSB(uva$Kidney[-25], r11donor$Kidney[-25], uva.kfit, uva.ke, uv
 
 
 ##  Get the 95% CI for uva.kid.boot
-
+boot.ci(boot.out=uva.liv.boot,conf=0.95)
+boot.ci(boot.out=uva.kid.boot,conf=0.95)
 
 
 #	Plot the results for the coeffiecient for region 11 donors
+
+
+png("./project/figures/boot_liv_uva-r11.png", width=900, height=900)#, pointsize=30)
+par(mfrow=c(2,2), ps=20)
+plot(uva.liv.boot, index = 2) 
+par(mfrow=c(1,1))
+dev.off()
+
+png("./project/figures/boot_kid_uva-r11.png", width=900, height=900)#, pointsize=30)
+par(mfrow=c(2,2), ps=20)
 plot(uva.kid.boot, index = 2) 
+par(mfrow=c(1,1))
+dev.off()
 
 ##  A set of configurable plots for each term
+png("./project/figures/boot_liv_uva-r11.png", width=900, height=900)#, pointsize=30)
 par(mfrow = c(1,2))
-hist(uva.kid.boot$t[,2], main = "Region 11 Donors",
+hist(uva.kid.boot$t[,2], main = "Region 11 Liver Donors",
      xlab ="Coefficient Values",   col = "steelblue", breaks = 50)
 qqnorm(uva.kid.boot$t[,2])
 qqline(uva.kid.boot$t[,2])
 par(mfrow = c(1,1))
+dev.off()
+
+
+png("./project/figures/boot_kid_uva-r11.png", width=900, height=900)#, pointsize=30)
+par(mfrow = c(1,2))
+hist(uva.kid.boot$t[,2], main = "Region 11 Kidney Donors",
+     xlab ="Coefficient Values",   col = "steelblue", breaks = 50)
+qqnorm(uva.kid.boot$t[,2])
+qqline(uva.kid.boot$t[,2])
+par(mfrow = c(1,1))
+dev.off()
 
 #  Bootstrapping TS
 
