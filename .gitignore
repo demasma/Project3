@@ -1,7 +1,6 @@
 .RData
 .Rhistory
 
-DATALOADER.R
 
 project/
 project/tex/
@@ -24,3 +23,4 @@ quizzes/
 
 
 
+.Rproj.user
