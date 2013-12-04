@@ -168,20 +168,43 @@ dev.off()
 uva is good at white people , but not good on non-white people
 
 
+
 # ACF analysis
-par(mfrow = c(1,3))
-acf(uvake[,2], main = "ACF UVA NW")
-acf(mcvke[,2], main = "ACF MCV NW")
-acf(dukeke[,2], main = "ACF Duke NW")
+png("acf_eth_liv.png", width=1200, height=600)
+par(mfrow = c(1,3), ps=20)
+acf(uva.l.e[,2], main = "ACF UVA NW Liver")
+acf(mcv.l.e[,2], main = "ACF MCV NW Liver")
+acf(duke.l.e[,2], main = "ACF Duke NW Liver")
 par(mfrow = c(1,1))
+dev.off()
 
 # PACF analysis
-par(mfrow = c(1,3))
-pacf(uvake[,2], main = "PACF UVA NW")
-pacf(mcvke[,2], main = "PACF MCV NW")
-pacf(dukeke[,2], main = "PACF Duke NW")
+png("pacf_eth_liv.png", width=1200, height=600)
+par(mfrow = c(1,3), ps=20)
+pacf(uva.l.e[,2], main = "PACF UVA NW Liver")
+pacf(mcv.l.e[,2], main = "PACF MCV NW Liver")
+pacf(duke.l.e[,2], main = "PACF Duke NW Liver")
 par(mfrow = c(1,1))
+dev.off()
 
+
+# ACF analysis
+png("acf_eth_kid.png", width=1200, height=600)
+par(mfrow = c(1,3), ps=20)
+acf(uva.k.e[,2], main = "ACF UVA NW Kidney")
+acf(mcv.k.e[,2], main = "ACF MCV NW Kidney")
+acf(duke.k.e[,2], main = "ACF Duke NW Kidney")
+par(mfrow = c(1,1))
+dev.off()
+
+# PACF analysis
+png("pacf_eth_kid.png", width=1200, height=600)
+par(mfrow = c(1,3), ps=20)
+pacf(uva.k.e[,2], main = "PACF UVA NW Kidney")
+pacf(mcv.k.e[,2], main = "PACF MCV NW Kidney")
+pacf(duke.k.e[,2], main = "PACF Duke NW Kidney")
+par(mfrow = c(1,1))
+dev.off()
 ## What do you conclude from the acf and pacf plots?
 
 
