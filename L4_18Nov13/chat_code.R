@@ -83,11 +83,30 @@ uva.pairs("~uva$Liver+uva$Liver_DD+uva$Liver_LD+r11donor$Liver+r11donor$Liver_DD
 #Step 2.1 Build a linear model: uva$Liver=b0+b1*r11donor$Liver+e. Call it uva.liver.lm.
 # Analyze the result: R^2, model utility test, t-tests, etc.
 uva.liver.lm<-lm(uva$Liver[-25]~r11donor$Liver[-25])
+
+uva.liver.lm<-lm(uva.xplant$Liver~r11.donor$Liver)
+mcv.liver.lm<-lm(mcv.xplant$Liver~r11.donor$Liver)
+duke.liver.lm<-lm(duke.xplant$Liver~r11.donor$Liver)
+
 summary(uva.liver.lm)
+summary(mcv.liver.lm)
+summary(duke.liver.lm)
+
+anova(uva.liver.lm, mcv.liver.lm)
+t.test(uva.liver.lm, mcv.liver.lm)
+
 
 #Step 2.2 Generate the diagnostic plots. Do you see any problem?
 par(mfrow=c(2,2))
 plot(uva.liver.lm)
+par(mfrow=c(1,1))
+
+par(mfrow=c(2,2))
+plot(mcv.liver.lm)
+par(mfrow=c(1,1))
+
+par(mfrow=c(2,2))
+plot(duke.liver.lm)
 par(mfrow=c(1,1))
 
 #Step 2.3 Estimate the model with bootstrapping (by residuals). Is b1 significant?
