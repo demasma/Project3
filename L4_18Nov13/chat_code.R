@@ -82,8 +82,7 @@ uva.pairs("~uva$Liver+uva$Liver_DD+uva$Liver_LD+r11donor$Liver+r11donor$Liver_DD
 #***************************************************************
 #Step 2.1 Build a linear model: uva$Liver=b0+b1*r11donor$Liver+e. Call it uva.liver.lm.
 # Analyze the result: R^2, model utility test, t-tests, etc.
-uva.liver.lm<-lm(uva$Liver[-25]~r11donor$Liver[-25])
-
+#uva.liver.lm<-lm(uva$Liver[-25]~r11donor$Liver[-25])
 uva.liver.lm<-lm(uva.xplant$Liver~r11.donor$Liver)
 mcv.liver.lm<-lm(mcv.xplant$Liver~r11.donor$Liver)
 duke.liver.lm<-lm(duke.xplant$Liver~r11.donor$Liver)
@@ -92,26 +91,68 @@ summary(uva.liver.lm)
 summary(mcv.liver.lm)
 summary(duke.liver.lm)
 
-anova(uva.liver.lm, mcv.liver.lm)
-t.test(uva.liver.lm, mcv.liver.lm)
+uva.kidney.lm<-lm(uva.xplant$Kidney~r11.donor$Kidney)
+mcv.kidney.lm<-lm(mcv.xplant$Kidney~r11.donor$Kidney)
+duke.kidney.lm<-lm(duke.xplant$Kidney~r11.donor$Kidney)
+
+summary(uva.kidney.lm)
+summary(mcv.kidney.lm)
+summary(duke.kidney.lm)
+
 
 
 #Step 2.2 Generate the diagnostic plots. Do you see any problem?
-par(mfrow=c(2,2))
+
+
+#===========================================================================
+# Diag plots for Liver
+#===========================================================================
+png("./diag_uva_liv_lm.png", width=900, height=900)
+par(mfrow=c(2,2), ps=20)
 plot(uva.liver.lm)
 par(mfrow=c(1,1))
+dev.off()
 
-par(mfrow=c(2,2))
+png("./diag_mcv_liv_lm.png", width=900, height=900)
+par(mfrow=c(2,2), ps=20)
 plot(mcv.liver.lm)
 par(mfrow=c(1,1))
+dev.off()
 
-par(mfrow=c(2,2))
+png("./diag_duke_liv_lm.png", width=900, height=900)
+par(mfrow=c(2,2), ps=20)
 plot(duke.liver.lm)
 par(mfrow=c(1,1))
+dev.off()
+
+#===========================================================================
+# Diag plots for kidney
+#===========================================================================
+png("./diag_uva_kid_lm.png", width=900, height=900)
+par(mfrow=c(2,2), ps=20)
+plot(uva.kidney.lm)
+par(mfrow=c(1,1))
+dev.off()
+
+png("./diag_mcv_kid_lm.png", width=900, height=900)
+par(mfrow=c(2,2), ps=20)
+plot(mcv.kidney.lm)
+par(mfrow=c(1,1))
+dev.off()
+
+png("./diag_duke_kid_lm.png", width=900, height=900)
+par(mfrow=c(2,2), ps=20)
+plot(duke.kidney.lm)
+par(mfrow=c(1,1))
+dev.off()
 
 #Step 2.3 Estimate the model with bootstrapping (by residuals). Is b1 significant?
 
 #Step 2.3 Estimate the model with bootstrapping (by residuals). Is b1 significant?
+#===========================================================================
+# BSing LM for UVa Liver
+#===========================================================================
+#
 # Get the fitted values from the regression model
 uva.lfit <- fitted(uva.liver.lm)
 # Get the residuals from the regression model
@@ -119,7 +160,8 @@ uva.le <- residuals(uva.liver.lm)
 # Get the regression model
 uva.mod <- model.matrix(uva.liver.lm)
 # Bootstrapping LM
-uva.liver.boot <- RTSB(uva$Liver[-25], r11donor$Liver[-25], uva.lfit, uva.le, uva.mod,5000)
+#uva.liver.boot <- RTSB(uva.xplant$Liver[-25], r11.donor$Liver[-25], uva.lfit, uva.le, uva.mod,5000)
+uva.liver.boot <- RTSB(uva.xplant$Liver, r11.donor$Liver, uva.lfit, uva.le, uva.mod,5000)
 uva.liver.boot$t
 sqrt(var(uva.liver.boot$t))
 
@@ -127,14 +169,74 @@ sqrt(var(uva.liver.boot$t))
 boot.ci(uva.liver.boot, .95, index=2)
 
 # Distribution of b1
-par(mfrow = c(1,2))
+png("./boot_uva_liv_lm.png", width=900, height=900)
+par(mfrow=c(1,2), ps=20)
 hist(uva.liver.boot$t[,2], main = "Region 11 Donors",xlab ="Coefficient Values", col = "steelblue", breaks = 50)
 qqnorm(uva.liver.boot $t[,2])
 qqline(uva.liver.boot $t[,2])
 par(mfrow = c(1,1))
+dev.off()
 
 
 #Step 2.4* What about MCV? Repeat the above steps and compare the coefficients. 
+#===========================================================================
+# BSing LM for MCV Liver
+#===========================================================================
+#
+# Get the fitted values from the regression model
+mcv.lfit <- fitted(mcv.liver.lm)
+# Get the residuals from the regression model
+mcv.le <- residuals(mcv.liver.lm)
+# Get the regression model
+mcv.mod <- model.matrix(mcv.liver.lm)
+# Bootstrapping LM
+#mcv.liver.boot <- RTSB(mcv.xplant$Liver[-25], r11.donor$Liver[-25], mcv.lfit, mcv.le, mcv.mod,5000)
+mcv.liver.boot <- RTSB(mcv.xplant$Liver, r11.donor$Liver, mcv.lfit, mcv.le, mcv.mod,5000)
+mcv.liver.boot$t
+sqrt(var(mcv.liver.boot$t))
+
+# 95% CI of r11donor
+boot.ci(mcv.liver.boot, .95, index=2)
+
+# Distribution of b1
+png("./boot_mcv_liv_lm.png", width=900, height=900)
+par(mfrow=c(1,2), ps=20)
+hist(mcv.liver.boot$t[,2], main = "Region 11 Donors",xlab ="Coefficient Values", col = "steelblue", breaks = 50)
+qqnorm(mcv.liver.boot $t[,2])
+qqline(mcv.liver.boot $t[,2])
+par(mfrow = c(1,1))
+dev.off()
+
+
+#===========================================================================
+# BSing LM for Duke Liver
+#===========================================================================
+#
+# Get the fitted values from the regression model
+duke.lfit <- fitted(duke.liver.lm)
+# Get the residuals from the regression model
+duke.le <- residuals(duke.liver.lm)
+# Get the regression model
+duke.mod <- model.matrix(duke.liver.lm)
+# Bootstrapping LM
+#duke.liver.boot <- RTSB(duke.xplant$Liver[-25], r11.donor$Liver[-25], duke.lfit, duke.le, duke.mod,5000)
+duke.liver.boot <- RTSB(duke.xplant$Liver, r11.donor$Liver, duke.lfit, duke.le, duke.mod,5000)
+duke.liver.boot$t
+sqrt(var(duke.liver.boot$t))
+
+# 95% CI of r11donor
+boot.ci(duke.liver.boot, .95, index=2)
+
+# Distribution of b1
+png("./boot_duke_liv_lm.png", width=900, height=900)
+par(mfrow=c(1,2), ps=20)
+hist(duke.liver.boot$t[,2], main = "Region 11 Donors",xlab ="Coefficient Values", col = "steelblue", breaks = 50)
+qqnorm(duke.liver.boot $t[,2])
+qqline(duke.liver.boot $t[,2])
+par(mfrow = c(1,1))
+dev.off()
+
+
 
 
 
