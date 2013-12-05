@@ -25,3 +25,5 @@ quizzes/
 .Rproj.user
 
 project
+
+.RData
