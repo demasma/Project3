@@ -1,0 +1,185 @@
+REVIEW CLASS
+============
+### EISE
+- first step: visualizations
+- formulate goal
+- metrics: (adjR2, R2, AIC, BIC, MSE)
+  - how perf on new data
+- hypotheses: what are you doing?
+  - what are yo
+- approach
+  - data biases? interesting thing about data?
+  - temporal component?
+Evidence
+  - models applied to data
+Recommendation
+- model to results
+
+### DATA
+- ...
+
+### Univar
+- hist
+- boxplots (extreme points, influ points)
+  - dist ranges etc
+- QQ (is it normal?)
+- SPM corr b/w var
+  - relat b/w vars
+  - distr shape?
+  - collinearity
+- Factor plot (bw w factors)
+  - factors and extreme points
+  - discrimination of data
+- what is multicollinearity?
+  - relationship b/w data
+
+### PCA
+- why use? combo of predictors
+- acct for data using few vars
+- useful for large data sets
+
+### MLR in Engineering
+- pairwise not enough
+- specific relat b/w more than one var and response
+- Regr and ANOVA provide more 
+
+### Assumption for Optim
+- ...
+
+### Assump for Inference
+- ...
+
+### Qual Regr Model
+- reference level
+- signif comp to ref...etc
+- exp design
+- nonlinear relat...only through interactions
+- hypothesis testing (hum facto signif?? make all other level the base case...)
+
+### Appr to Model Selec
+- Partial F Test: only for nested models
+- t-test ...not good b/c of:
+  - multiplicity: multiple t-test...chance to reject null is increased
+- if can't use parametric methods...use BSing (since we don't have Gaussian)
+- criterion based meth (AIC, adjR2, etc)
+  - differ in amt of penalization of adjR2<AIC<BIC
+- meth to select (forw, backw, stepw) and could use AIC etc as fitness
+- Princ Comp to break down data
+- Test set (if have enough data)
+  - or Cross Valid
+
+### Diag plots
+- Resid vs fitt 
+  - const var:
+  - no patterns
+- scale location (same)
+- QQ plot: 
+  - how much violate normality
+- resid vs leverage
+  - influential points with high Cook's distance (greater than 0.5)
+  - outlier  (infl point is a type of outlier)
+
+GLM
+-------
+### GLM Rev
+- MLR is a type of GLM (just with a special link function)
+- many type of link functions
+
+### GLM Fam
+- ...
+
+### Model Utility Test
+- use Deviance in GLM
+- compare to null model
+
+### Diag Plots
+- want to see separation
+- sigmoid shape
+
+### ROC Curves
+- comp GLM in terms of ROC curves
+- want the one in the upper left quadrant
+
+### Poisson Regr
+- dispersion param (assume var and mean are equal)
+- estimate dispersion
+- est using
+  - resid mean dev
+  - use pearson resid
+
+### Meth for Disp Adj
+- ...
+
+Time Series
+------------
+### Time Series
+- set of RaVa spaced in time
+- components
+  - trend (general)
+  - seasonality (less than a year)
+  - cycles (simply recurring)
+  - rand fluc (noise)
+- stationarity (weak)
+  - no moving average terms
+  - weak means not perfect
+- what is over differencing? PACF will see bouncing
+- autocorr?
+- partial autocorr
+
+### Model of Trend and Seasonality
+- trend = coeff * time
+- seasonality = dummy var (seasons time of year etc)
+  - also use sine/cosines
+
+### Periodogram
+- check for seasonality
+
+### Overview
+- resid could have correlation
+- so use autoregressive and moving average terms
+- how far back to look at what is happening now
+
+### Example
+- remove the trend
+- remove seasonality
+- then acct for resids
+
+### HAM/SPAM
+- after trend/seasonality
+- choose AR1
+
+### SPAM ARIMA(1,1) Diag Plots
+- compare TS models (
+- std resid plot? constant var and mean at 0
+- ACF? don't see anything outside of blue
+- pvals? want to see no signf...want to comp with steady pvals for many corrs
+
+
+BS 
+-----------
+### Motiv
+- not much data...sparse etc
+- no known distros
+
+### Resamp
+- n obs
+- sample n times w replace
+- resamp from resid
+
+SIM
+-------------
+- what do when don't have the data?
+
+### Monte Carlo Sim
+- future events
+- example:
+  - (how to solve if uva not have roanoke?)
+  - add a center?
+    - add a categorical var?
+- pseudo random draws and produce distro w data
+- sim to get better conf intervals
+
+Projects
+----------
+
+  - 
