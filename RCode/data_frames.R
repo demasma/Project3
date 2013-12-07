@@ -98,6 +98,39 @@ r11.xplant <- r11.xplant[-26, c("Year","Liver", "Liver_DD", "Liver_LD","Kidney",
 
 r11.donor <- r11.donor[-26, c("Year","Liver", "Liver_DD", "Liver_LD","Kidney", "Kidney_DD", "Kidney_LD") ]
 
+# Form data sets for the kidney transplants
+colnames(uva.eth)
+uva.l.eth <- uva.eth[-26, which(substr(colnames(uva.eth),1,5) == "Liver")]
+uva.k.eth <- subdata("Kidney", uva.eth)
+mcv.l.eth <- mcv.eth[-26, which(substr(colnames(mcv.eth),1,5) == "Liver")]
+mcv.k.eth <- subdata("Kidney", mcv.eth)
+duke.l.eth <- duke.eth[-26, which(substr(colnames(duke.eth),1,5) == "Liver")]
+duke.k.eth <- subdata("Kidney", duke.eth)
+r11.l.eth <- r11.eth[-26, which(substr(colnames(r11.eth),1,5) == "Liver")]
+r11.k.eth <- subdata("Kidney", r11.eth)
+
+
+#=======================================================================
+# Combine counts for non-white people into a single field
+#=======================================================================
+#
+# Remove year 2013 and combine all ethnic groups other than white into one category
+# UVA
+uva.l.e <- data.frame(uva.l.eth[-26, "Liver.W"], Liver.O = apply(uva.l.eth[-26,which(colnames(uva.l.eth) != "Liver.W")], 1, sum))
+uva.l.e <- data.frame(uva.l.eth$Liver.W, Liver.O = apply(uva.l.eth[,which(colnames(uva.l.eth) != "Liver.W")], 1, sum))
+uva.k.e <- data.frame(uva.k.eth[-26, "Kidney.W"], Kidney.O = apply(uva.k.eth[-26,which(colnames(uva.k.eth) != "Kidney.W")], 1, sum))
+
+# MCV
+mcv.l.e <- data.frame(mcv.l.eth[-26, "Liver.W"], Liver.O = apply(mcv.l.eth[-26,which(colnames(mcv.l.eth) != "Liver.W")], 1, sum))
+mcv.k.e <- data.frame(mcv.k.eth[-26, "Kidney.W"], Kidney.O = apply(mcv.k.eth[-26,which(colnames(mcv.k.eth) != "Kidney.W")], 1, sum))
+
+# Duke
+duke.l.e <- data.frame(duke.l.eth[-26, "Liver.W"], Liver.O = apply(duke.l.eth[-26,which(colnames(duke.l.eth) != "Liver.W")], 1, sum))
+duke.k.e <- data.frame(duke.k.eth[-26, "Kidney.W"], Kidney.O = apply(duke.k.eth[-26,which(colnames(duke.k.eth) != "Kidney.W")], 1, sum))
+
+# R11
+r11.l.e <- data.frame(r11.l.eth[-26, "Liver.W"], Liver.O = apply(r11.l.eth[-26,which(colnames(r11.l.eth) != "Liver.W")], 1, sum))
+r11.k.e <- data.frame(r11.k.eth[-26, "Kidney.W"], Kidney.O = apply(r11.k.eth[-26,which(colnames(r11.k.eth) != "Kidney.W")], 1, sum))
 
 #=======================================================================
 # Set the working directory (mostly so figures don't end up in stupid
