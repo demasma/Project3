@@ -56,12 +56,14 @@ summary(uva.mcv.l.dm)
 uva.mcv.l.lm2<- lm(uva.mcv.l.ar1 ~ ., data = uva.mcv.l.dm)
 summary(uva.mcv.l.lm2)
 AIC(uva.mcv.l.lm2)
-lm.fitted <- fitted(modelname)
-lm.resid <- residuals(modelname)
-lm.model <- model.matrix(modelname)
-lm.boot <- RTSB(resp, preds, lm.fitted, lm.resid, lm.model, 5000)
+lm.fitted <- fitted(uva.mcv.l.lm2)
+lm.resid <- residuals(uva.mcv.l.lm2)
+lm.model <- model.matrix(uva.mcv.l.lm2)
+lm.boot <- RTSB(uva.mcv.l.ar1, r11k, lm.fitted, lm.resid, lm.model, 5000)
 lm.boot
 boot.ci(lm.boot,0.95,type=c('bca','perc'),index=1)
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=2)
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=3)
 # diagnostics
 
 png("./lm-ar1_diag_diff_uva_mcv_l.png", width=900, height=900)

@@ -55,7 +55,15 @@ summary(uva.duke.l.dm)
 # Linear model with time series component
 uva.duke.l.lm2<- lm(uva.duke.l.ar1 ~ ., data = uva.duke.l.dm)
 summary(uva.duke.l.lm2)
-
+AIC(uva.duke.l.lm2)
+lm.fitted <- fitted(uva.duke.l.lm2)
+lm.resid <- residuals(uva.duke.l.lm2)
+lm.model <- model.matrix(uva.duke.l.lm2)
+lm.boot <- RTSB(uva.duke.l.ar1, r11k, lm.fitted, lm.resid, lm.model, 5000)
+lm.boot
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=1)
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=2)
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=3)
 # diagnostics
 
 png("./lm-ar1_diag_diff_uva_duke_l.png", width=900, height=900)

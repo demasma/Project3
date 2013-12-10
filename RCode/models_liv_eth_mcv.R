@@ -55,6 +55,15 @@ summary(uva.mcv.l.e.dm)
 # Linear model with time series component
 uva.mcv.l.e.lm2<- lm(uva.mcv.l.e.ar1 ~ ., data = uva.mcv.l.e.dm)
 summary(uva.mcv.l.e.lm2)
+AIC(uva.mcv.l.e.lm2)
+lm.fitted <- fitted(uva.mcv.l.e.lm2)
+lm.resid <- residuals(uva.mcv.l.e.lm2)
+lm.model <- model.matrix(uva.mcv.l.e.lm2)
+lm.boot <- RTSB(uva.mcv.l.e.ar1, r11k, lm.fitted, lm.resid, lm.model, 5000)
+lm.boot
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=1)
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=2)
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=3)
 
 # diagnostics
 

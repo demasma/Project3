@@ -15,6 +15,15 @@ dev.off()
 # LM Model
 uva.duke.e.lm <- lm(uva.duke.e ~ r11.donor$Kidney)
 summary(uva.duke.e.lm)
+AIC(uva.duke.e.lm)
+lm.fitted <- fitted(uva.duke.e.lm)
+lm.resid <- residuals(uva.duke.e.lm)
+lm.model <- model.matrix(uva.duke.e.lm)
+lm.boot <- RTSB(uva.duke.e, r11.donor$Kidney, lm.fitted, lm.resid, lm.model, 5000)
+lm.boot
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=1)
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=2)
+
 
 # LM Model Diagnostics
 png("./lm_diag_diff_uva-duke_kid_eth.png", width=900, height=900)
