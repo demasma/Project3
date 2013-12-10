@@ -3,7 +3,8 @@ uva.k.e
 
 # TS Difference
 uva.mcv.e <- uva.k.e$Kidney.O - mcv.k.e$Kidney.O 
-
+plot(uva.mcv.e)
+lines(uvamcv.e, col="blue")
 # TS Plot
 png("./ts_diff_uva-mcv_kid_eth.png", width=900, height=900)
 par(mfrow=c(1,1), ps=20)
