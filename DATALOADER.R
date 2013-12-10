@@ -1,6 +1,6 @@
 
-#setwd("~/Projects")
-setwd("~/Documents/UVaGrad/Fall2013/SYS6021/")
+setwd("~/Projects")
+#setwd("~/Documents/UVaGrad/Fall2013/SYS6021/")
 setwd("./Project3/TransplantData/")
 
 r11.donor<-read.table("R11donor.csv", sep = ",", header = T)
@@ -19,8 +19,8 @@ mcv.eth <- read.table('MCVethnic.csv', sep = ',', header = T)
 r11.eth <- read.table('R11ethnic.csv', sep = ',', header = T)
 uva.eth <- read.table('UVAethnic.csv', sep = ',', header = T)
 
-#setwd("~/Projects")
-setwd("~/Documents/UVaGrad/Fall2013/SYS6021/")
+setwd("~/Projects")
+#setwd("~/Documents/UVaGrad/Fall2013/SYS6021/")
 setwd("./RCode/")
 # source("TSbootfunctions.R")
 # source("SPM_Panel.R")
@@ -33,6 +33,6 @@ for (i in 1:length(r.code.files)) {
   source(r.code.files[i])
 }
 
-#setwd("~/Projects")
-setwd("~/Documents/UVaGrad/Fall2013/SYS6021/")
+setwd("~/Projects")
+#setwd("~/Documents/UVaGrad/Fall2013/SYS6021/")
 setwd("./Project3/")
