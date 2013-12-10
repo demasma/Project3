@@ -8,6 +8,7 @@ uva.mcv.e <- uva.k.e$Kidney.O - mcv.k.e$Kidney.O
 png("./ts_diff_uva-mcv_kid_eth.png", width=900, height=900)
 par(mfrow=c(1,1), ps=20)
 plot(uva.xplant$Year, uva.mcv.e, col = "blue", type = "l", xlab = "Time", 
+     ylim=c(-80,10),
      ylab = "MCV - UVA", 
      main = "Difference between Kidney Transplants at UVA and MCV for 
      Non-White Patients")
@@ -56,7 +57,16 @@ summary(uva.mcv.e.dm)
 
 # Linear model with time series component
 uva.mcv.e.lm2<- lm(uva.mcv.e.ar1 ~ ., data = uva.mcv.e.dm)
-summary(uva.mcv.lm2)
+AIC(uva.mcv.e.lm2)
+summary(uva.mcv.e.lm2)
+lm.fitted <- fitted(uva.mcv.e.lm2)
+lm.resid <- residuals(uva.mcv.e.lm2)
+lm.model <- model.matrix(uva.mcv.e.lm2)
+lm.boot <- RTSB(uva.mcv.e.ar1, r11k, lm.fitted, lm.resid, lm.model, 5000)
+lm.boot
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=1)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=2)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=3)
 
 # diagnostics
 

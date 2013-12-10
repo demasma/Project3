@@ -31,8 +31,8 @@ unc <- read.table("UNCxplant.csv", sep = ",", header = T)
 setwd("..")
 #**********************************************
 
-source("Transplant.plots.R")
-source("TSbootfunctions.R")
+source("../RCode/Transplant.plots.R")
+source("../RCode/TSbootfunctions.R")
 library(boot)
 library(forecast)
 

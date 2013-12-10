@@ -83,6 +83,15 @@ summary(uva.mcv.dm)
 # Linear model with time series component
 uva.mcv.lm2<- lm(uva.mcv.ar1 ~ ., data = uva.mcv.dm)
 summary(uva.mcv.lm2)
+AIC(uva.mcv.lm2)
+lm.fitted <- fitted(uva.mcv.lm2)
+lm.resid <- residuals(uva.mcv.lm2)
+lm.model <- model.matrix(uva.mcv.lm2)
+lm.boot <- RTSB(uva.mcv.ar1, r11k, lm.fitted, lm.resid, lm.model, 5000)
+lm.boot
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=1)
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=2)
+boot.ci(lm.boot,0.95,type=c('bca','perc'),index=3)
 
 # diagnostics
 
@@ -123,6 +132,19 @@ summary(uva.mcv.dm)
 uva.duke.lm2<- lm(uva.duke.ar4 ~ ., data = uva.duke.dm)
 summary(uva.duke.lm2)
 
+lm.fitted <- fitted(uva.duke.lm2)
+lm.resid <- residuals(uva.duke.lm2)
+lm.model <- model.matrix(uva.duke.lm2)
+lm.boot <- RTSB(uva.duke.ar4, r11k, lm.fitted, lm.resid, lm.model, 5000)
+lm.boot
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=1)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=2)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=3)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=4)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=5)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=6)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=7)
+
 # diagnostics
 
 png("./lm-ar4_diag_diff_uva-duke.png", width=900, height=900)
@@ -159,7 +181,21 @@ uva.duke.dm <- data.frame(uva.duke.ar5, r11k, uva.duke.lm.e1,uva.duke.lm.e2,uva.
 
 # Linear model with time series component
 uva.duke.lm3<- lm(uva.duke.ar5 ~ ., data = uva.duke.dm)
+AIC(uva.duke.lm3)
 summary(uva.duke.lm3)
+lm.fitted <- fitted(uva.duke.lm3)
+lm.resid <- residuals(uva.duke.lm3)
+lm.model <- model.matrix(uva.duke.lm3)
+lm.boot <- RTSB(uva.duke.ar5, r11k, lm.fitted, lm.resid, lm.model, 5000)
+lm.boot
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=1)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=2)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=3)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=4)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=5)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=6)
+boot.ci(lm.boot,0.95,type=c('bca','perc'), index=7)
+
 
 # diagnostics
 png("./lm-ar5_diag_diff_uva-duke.png", width=900, height=900)
