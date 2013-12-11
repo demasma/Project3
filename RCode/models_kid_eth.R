@@ -1,86 +1,106 @@
 mcv.k.e
 uva.k.e
 
-# TS Difference
 uva.mcv.e <- uva.k.e$Kidney.O - mcv.k.e$Kidney.O 
+uva.duke.e <- uva.k.e$Kidney.O - duke.k.e$Kidney.O
 
-# TS Plot
 png("./ts_diff_uva-mcv_kid_eth.png", width=900, height=900)
 par(mfrow=c(1,1), ps=20)
 plot(uva.xplant$Year, uva.mcv.e, col = "blue", type = "l", xlab = "Time", 
-     ylim=c(-80,10),
      ylab = "MCV - UVA", 
      main = "Difference between Kidney Transplants at UVA and MCV for 
      Non-White Patients")
 abline(h=0)
 dev.off()
 
-# LM Model
-uva.mcv.e.lm <- lm(uva.mcv.e ~ r11.donor$Kidney)
-summary(uva.mcv.e.lm)
+png("./ts_diff_uva-duke.png", width=900, height=900)
+par(mfrow=c(1,1), ps=20)
+plot(uva.xplant$Year, uva.duke, col = "blue", type = "l", xlab = "Time", 
+     ylab = "MCV - UVA", 
+     main = "Difference between Kidney Transplants at UVA and Duke")
+abline(h=0)
+dev.off()
 
-# Diagnostics
-png("./lm_diag_diff_uva-mcv_kid_eth.png", width=900, height=900)
+uva.mcv.e.lm <- lm(uva.mcv.e ~ r11.donor$Kidney)
+summary(uva.mcv.lm)
+
+uva.duke.lm <- lm(uva.duke ~ r11.donor$Kidney)
+summary(uva.duke.lm)
+
+# diagnostics
+
+png("./lm_diag_diff_uva-mcv.png", width=900, height=900)
 par(mfrow = c(2,2), ps=20)
-plot(uva.mcv.e.lm)
+plot(uva.mcv.lm)
+par(mfrow = c(1,1))
+dev.off()
+
+png("./lm_diag_diff_uva-duke.png", width=900, height=900)
+par(mfrow = c(2,2),ps=20)
+plot(uva.duke.lm)
 par(mfrow = c(1,1))
 dev.off()
 
 # ACF PACF
-png("./acf_diff_uva-mcv_kid_eth.png", width=900, height=900)
+png("./acf_diff_uva-mcv.png", width=900, height=900)
 par(mfcol = c(1,2), ps=20)
-acf(uva.mcv.e.lm$residuals)
-pacf(uva.mcv.e.lm$residuals)
+acf(uva.mcv.lm$residuals)
+pacf(uva.mcv.lm$residuals)
 par(mfcol = c(1,1))
 dev.off()
 
-(uva.mcv.e.ar <- ar(uva.mcv.e.lm$residuals))
+png("./acf_diff_uva-duke.png", width=900, height=900)
+par(mfcol = c(1,2),ps = 20)
+acf(uva.duke.lm$residuals)
+pacf(uva.duke.lm$residuals)
+par(mfcol = c(1,1))
+dev.off()
+
+(uva.mcv.ar <- ar(uva.mcv.lm$residuals))
+(uva.duke.ar <- ar(uva.duke.lm$residuals))
 
 # Plot the aic for different numbers of ar terms
-png("./aic_ar_diff_uva-mcv_kid_eth.png", width=900, height=900)
+png("./air_ar_diff_uva-mcv.png", width=900, height=900)
 par(mfcol = c(1,1),ps = 20)
-plot(uva.mcv.e.ar$aic, type = "h") # need 
+plot(uva.mcv.ar$aic, type = "h") # need 
 dev.off()
+
+png("./air_ar_diff_uva-duke.png", width=900, height=900)
+par(mfcol = c(1,1),ps = 20)
+plot(uva.duke.ar$aic, type = "h")
+dev.off()
+
 
 # Adding the time series model
 # AR(1)
 
-uva.mcv.e.lm.e1 <- uva.mcv.e.lm$resid[1:24] # new var..1 AR term put resid into AR
+uva.mcv.lm.e1 <- uva.mcv.lm$resid[1:24] # new var..1 AR term put resid into AR
 
 r11k <- r11.donor$Kidney[2:25] # need lag of use 1-24 to pred 2-25
 
-uva.mcv.e.ar1 <- uva.k.e$Kidney.O[2:25] - mcv.k.e$Kidney.O[2:25] # lag from 1-24 to pred 2-25 diff
+uva.mcv.ar1 <- uva.xplant$Kidney[2:25] - mcv.xplant$Kidney[2:25] # lag from 1-24 to pred 2-25 diff
 
-uva.mcv.e.dm <- data.frame(uva.mcv.e.ar1, r11k, uva.mcv.e.lm.e1)
+uva.mcv.dm <- data.frame(uva.mcv.ar1, r11k, uva.mcv.lm.e1)
 
-summary(uva.mcv.e.dm)
+summary(uva.mcv.dm)
 
 # Linear model with time series component
-uva.mcv.e.lm2<- lm(uva.mcv.e.ar1 ~ ., data = uva.mcv.e.dm)
-AIC(uva.mcv.e.lm2)
-summary(uva.mcv.e.lm2)
-lm.fitted <- fitted(uva.mcv.e.lm2)
-lm.resid <- residuals(uva.mcv.e.lm2)
-lm.model <- model.matrix(uva.mcv.e.lm2)
-lm.boot <- RTSB(uva.mcv.e.ar1, r11k, lm.fitted, lm.resid, lm.model, 5000)
-lm.boot
-boot.ci(lm.boot,0.95,type=c('bca','perc'), index=1)
-boot.ci(lm.boot,0.95,type=c('bca','perc'), index=2)
-boot.ci(lm.boot,0.95,type=c('bca','perc'), index=3)
+uva.mcv.lm2<- lm(uva.mcv.ar1 ~ ., data = uva.mcv.dm)
+summary(uva.mcv.lm2)
 
 # diagnostics
 
-png("./lm-ar1_diag_diff_uva-mcv_kid_eth.png", width=900, height=900)
+png("./lm-ar1_diag_diff_uva-mcv.png", width=900, height=900)
 par(mfrow = c(2,2),ps=20)
-plot(uva.mcv.e.lm2)
+plot(uva.mcv.lm2)
 par(mfrow = c(1,1))
 # this is $w_t$ may indicate white noise (MA) term
 dev.off()
 
-png("./lm-ar1_acf_diff_uva-mcv_kid_eth.png", width=900, height=900)
+png("./lm-ar1_acf_diff_uva-mcv.png", width=900, height=900)
 par(mfrow =c(1,2),ps=20)
-acf(uva.mcv.e.lm2$residuals)
-pacf(uva.mcv.e.lm2$residuals)
+acf(uva.mcv.lm2$residuals)
+pacf(uva.mcv.lm2$residuals)
 par(mfrow =c(1,1))
 dev.off()
 
