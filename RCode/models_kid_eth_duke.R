@@ -1,10 +1,12 @@
 # TS Difference
 uva.duke.e <- uva.k.e$Kidney.O - duke.k.e$Kidney.O
+plot(uva.duke.e,ylim=c(-500,200)
+lines(uvaduke.e, col="blue")
 
 # TS Plot
 png("./ts_diff_uva-duke_kid_eth.png", width=900, height=900)
 par(mfrow=c(1,1), ps=20)
-plot(uva.xplant$Year, uva.duke.e, col = "blue", type = "l", ylim=c(-50,10),
+plot(uva.xplant$Year[-26], uva.duke.e, col = "blue", type = "l", ylim=c(-50,10),
      xlab = "Time", 
      ylab = "MCV - UVA", 
      main = "Difference between Kidney Transplants at UVA and Duke\n
